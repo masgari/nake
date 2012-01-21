@@ -1,0 +1,17 @@
+# generic OSX exclusions
+.DS_Store
+._*
+
+# node.js exclusions
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+node_modules/
+
+# Intellij exclusions
+.idea/

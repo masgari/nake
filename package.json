@@ -1,0 +1,20 @@
+{
+	"name": "nake",
+	"description": "A build system for node.js",
+	"version": "0.0.1",
+	"homepage": "https://github.com/cpradog/Nake",
+	"author": "Carlos Prado (cpradog@me.com)",
+	"repository": {
+		"type": "git",
+		"url": "git://git@github.com:cpradog/Nake.git"
+	},
+	"engine": {
+		"node": ">=0.4.7"
+	},
+	"dependencies": {
+	},
+	"devDependencies": {
+		"mocha": "0.10.1",
+		"chai": "0.1.6"
+	}
+}
