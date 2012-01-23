@@ -1,0 +1,54 @@
+{
+    "config": {
+        "Nakefiles": [
+            "Nakefile", "Nakefile.js", "nakefile", "nakefile.js"
+        ]
+    },
+
+    "context": {
+        "libs": [
+        ]
+    },
+
+    "output": {
+        "quiet": false,
+        "level": "notice",
+        "levels": {
+            "emergency": {
+                "value": 0,
+                "isError": true
+            },
+
+            "alert": {
+                "value": 1,
+                "isError": true
+            },
+
+            "critical": {
+                "value": 2,
+                "isError": true
+            },
+
+            "error": {
+                "value": 3,
+                "isError": true
+            },
+
+            "warning": {
+                "value": 4
+            },
+
+            "notice": {
+                "value": 5
+            },
+
+            "information": {
+                "value": 6
+            },
+
+            "debug": {
+                "value": 7
+            }
+        }
+    }
+}

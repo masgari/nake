@@ -1,0 +1,59 @@
+{
+    "output": {
+        "quiet": false,
+        "level": "notice",
+        "levels": {
+            "emergency": {
+                "value": 0,
+                "isError": true,
+                "prefix": "EMERGENCY: ",
+                "format": "[1;31m"
+            },
+
+            "alert": {
+                "value": 1,
+                "isError": true,
+                "prefix": "ALERT: ",
+                "format": "[1;31m"
+            },
+
+            "critical": {
+                "value": 2,
+                "isError": true,
+                "prefix": "CRITICAL: ",
+                "format": "[1;31m"
+            },
+
+            "error": {
+                "value": 3,
+                "isError": true,
+                "prefix": "!!! ",
+                "format": "[0;31m"
+            },
+
+            "warning": {
+                "value": 4,
+                "prefix": "*** ",
+                "format": "[0;33m"
+            },
+
+            "notice": {
+                "value": 5,
+                "prefix": "",
+                "format": "[0m"
+            },
+
+            "information": {
+                "value": 6,
+                "prefix": ">>> ",
+                "format": "[0;34m"
+            },
+
+            "debug": {
+                "value": 7,
+                "prefix": "DBG ",
+                "format": "[0m"
+            }
+        }
+    }
+}

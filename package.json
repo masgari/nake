@@ -12,7 +12,12 @@
 		"node": ">=0.4.7"
 	},
 	"dependencies": {
+		"stack-trace": "0.0.6",
+		"long-stack-traces": "0.1.2",
+		"nopt": "1.0.10",
+        "pkginfo": "0.2.3"
 	},
+    "main": "./lib/nake.js",
 	"devDependencies": {
 		"mocha": "0.10.1",
 		"chai": "0.1.6"
