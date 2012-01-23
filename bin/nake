@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 
-var app = require('../cli/app.js');
+var app = require('../cli/app');
 app.main(process.argv);

@@ -17,7 +17,7 @@
 		"nopt": "1.0.10",
         "pkginfo": "0.2.3"
 	},
-    "main": "./lib/nake.js",
+    "main": "./src/nake.js",
 	"devDependencies": {
 		"mocha": "0.10.1",
 		"chai": "0.1.6"

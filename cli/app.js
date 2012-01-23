@@ -3,8 +3,8 @@ require('long-stack-traces');
 
 var path = require('path');
 var nopt = require('nopt');
-var nake = require('../lib/nake');
-var options = require('./options.js');
+var nake = require('../src/nake');
+var options = require('./options');
 /**
  * Find the nakefile.
  *

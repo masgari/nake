@@ -73,7 +73,6 @@ Settings.prototype.set = function(key, value) {
  */
 Settings.prototype.importFile = function(file) {
     if(!path.existsSync(file)) {
-        output.warn('Settings file not found: %s', file);
         return;
     }
 
