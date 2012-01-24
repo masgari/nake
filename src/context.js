@@ -2,9 +2,26 @@ var fs = require('fs');
 var path = require('path');
 var vm = require('vm');
 var common = require('./common');
+var settings = require('./settings');
 var output = require('./output');
 var Namespace = require('./namespace');
 var Task = require('./task');
+
+/**
+ * Resolve a path reference.
+ *
+ * @param {string} p Path to resolve.
+ * @returns {string}
+ */
+var resolvePath = function(p) {
+    return p.replace(/\$\{(.*?)\}/g, function(match, envName) {
+        if(envName == 'NAKE_HOME') {
+            return path.resolve(path.dirname(module.filename), '..');
+        }
+
+        return process.env[envName];
+    });
+};
 
 /**
  * Create a new sandbox for the specified context.
@@ -31,6 +48,12 @@ var createSandbox = function(ctx, file) {
         sandbox[name] = function() {
             return Context.prototype[name].apply(ctx, arguments);
         };
+    });
+
+    // prepare required modules
+    var requires = settings.get('context.require', {});
+    Object.keys(requires).forEach(function(name) {
+        sandbox[name] = require(path.resolve(sandbox.__dirname, resolvePath(requires[name])));
     });
 
     return sandbox;
@@ -95,6 +118,18 @@ function Context(file, encoding, parent) {
     output.info('Loading file: %s', file);
     var script = common.stripBOM(fs.readFileSync(file, encoding || 'utf8'));
     vm.runInNewContext(script, this._sandbox, file);
+
+    // Include all configured includes
+    var includes = settings.get('context.include', []);
+    var self = this;
+    includes.forEach(function(include) {
+        try {
+            self.include(path.resolve(path.dirname(file), resolvePath(include)));
+        } catch(e) {
+            output.warn('Unable to include: %s', include);
+            output.warn(e.message);
+        }
+    });
 }
 module.exports = Context;
 
@@ -104,19 +139,15 @@ module.exports = Context;
  * @public
  * @param {string} taskName The name of the task to invoke.
  * @param {Array} args Task arguments.
+ * @param {function} cb Callback.
  */
-Context.prototype.call = function(taskName, args) {
-    args = Array.prototype.slice.call(arguments, 1) || [];
-    if(args.length === 1 && common.isArray(args[0])) {
-        args = args[0];
-    }
-
+Context.prototype.call = function(taskName, args, cb) {
     var task = this._globalNamespace.lookup(taskName);
     if(common.isNullOrUndefined(task)) {
         throw new Error('Task not found: ' + taskName);
     }
 
-    Task.prototype.invoke.apply(task, args);
+    task.invoke(args, cb);
 };
 
 /**
@@ -138,9 +169,11 @@ Context.prototype.desc = function(desc) {
  * @param {string} name The task name.
  * @param {!function|Array.<string>} dependencies The task dependencies or the actions if no dependencies needed.
  * @param {!function} actions The task actions.
+ * @param {object} options Other task options.
  */
-Context.prototype.task = function(name, dependencies, actions) {
+Context.prototype.task = function(name, dependencies, actions, options) {
     if(common.isFunction(dependencies)) {
+        options = actions;
         actions = dependencies;
         dependencies = [];
     }
@@ -156,7 +189,7 @@ Context.prototype.task = function(name, dependencies, actions) {
         name = name.substr(i + Namespace.separator.length);
     }
 
-    var task = new Task(name, ns, desc, dependencies, actions);
+    var task = new Task(name, ns, desc, dependencies, actions, (options && options.async));
     ns.addTask(task);
 };
 

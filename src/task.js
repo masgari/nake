@@ -13,8 +13,9 @@ var InvocationChain = require('./invocationChain');
  * @param {string} desc The description of the task.
  * @param {Array} dependencies The task dependencies.
  * @param {function} actions The function with the actions associated to the task.
+ * @param {boolean} async Determines if the task should be executed in asynchronous mode.
  */
-function Task(name, ns, desc, dependencies, actions) {
+function Task(name, ns, desc, dependencies, actions, async) {
     output.assert(typeof(name) === 'string', 'Task name must be a string.');
     output.assert(ns instanceof Namespace, 'Task namespace must be a Namespace object.');
 
@@ -54,6 +55,13 @@ function Task(name, ns, desc, dependencies, actions) {
     this.actions = actions;
 
     /**
+     * Determines if the task should be executed in asynchronous mode.
+     * @type {boolean}
+     * @public
+     */
+    this.async = (async === true);
+
+    /**
      * Determines if the task already has invoked.
      * @type {boolean}
      * @private
@@ -80,10 +88,25 @@ Task.prototype.isNeeded = function() {
  * @protected
  * @this {Task}
  * @param {Array} args The task arguments.
+ * @param {function} cb Callback.
  */
-Task.prototype.execute = function(args) {
+Task.prototype.execute = function(args, cb) {
+    var self = this;
     if(common.isFunction(this.actions)) {
-        this.actions.apply({}, args);
+        var sandbox = {};
+        sandbox.done = function() {
+            if(self.async && common.isFunction(cb)) {
+                cb();
+            }
+        };
+
+        this.actions.apply(sandbox, args);
+
+        if(!this.async) {
+            if(common.isFunction(cb)) {
+                cb();
+            }
+        }
     }
 };
 
@@ -101,10 +124,11 @@ Task.prototype.toString = function() {
  * Invoke the task.
  *
  * @this {Task}
+ * @param {Array} args Task arguments.
+ * @param {function} cb Callback.
  */
-Task.prototype.invoke = function() {
-    var args = Array.prototype.slice.call(arguments) || [];
-    invokeWithChain(this, args, new InvocationChain())
+Task.prototype.invoke = function(args, cb) {
+    invokeWithChain(this, args, new InvocationChain(), cb);
 };
 
 /**
@@ -125,30 +149,39 @@ Task.TaskError = TaskError;
  * @param {Task} task The task to invoke.
  * @param {Array} args The task arguments.
  * @param {InvocationChain} chain The invocation chain to use.
+ * @param {function} cb Callback.
  */
-function invokeWithChain(task, args, chain) {
+function invokeWithChain(task, args, chain, cb) {
     output.info('Invoking task: %s', task.toString());
     output.debug('  with arguments: %j', args);
 
     if(task._invoked) {
         output.info('Omitting task. Already invoked.');
-        return;
+        if(common.isFunction(cb)) {
+            cb();
+        }
     }
 
     task._invoked = true;
     chain.append(task);
-    invokeDependencies(task, chain);
+    invokeDependencies(task, chain, function() {
+        if(task.isNeeded()) {
+            output.log(task.name + ':');
+            output.indent += 4;
 
-    if(task.isNeeded()) {
-        output.log(task.name + ':');
-        output.indent += 4;
-
-        try {
-            task.execute(args);
-        } finally {
-            output.indent -= 4;
+            try {
+                task.execute(args, function() {
+                    output.indent -= 4;
+                    if(common.isFunction(cb)) {
+                        cb();
+                    }
+                });
+            } catch(e) {
+                output.indent -= 4;
+                throw e;
+            }
         }
-    }
+    });
 }
 
 /**
@@ -156,16 +189,37 @@ function invokeWithChain(task, args, chain) {
  *
  * @param {Task} task The task.
  * @param {InvocationChain} chain The invocation chain to use.
+ * @param {function} cb Callback for continue execution.
  */
-function invokeDependencies(task, chain) {
+function invokeDependencies(task, chain, cb) {
     if(common.isArray(task.dependencies) && task.dependencies.length > 0) {
-        task.dependencies.forEach(function(name) {
-            var dep = task.namespace.lookup(name);
+        var invoke = function(i, cb) {
+            if(i >= task.dependencies.length) {
+                if(common.isFunction(cb)) {
+                    cb();
+                }
+            }
+
+            var dep = task.namespace.lookup(task.dependencies[i]);
             if(common.isNullOrUndefined(dep)) {
                 throw new TaskError('Task "%s" not found in namespace %s', name, task.namespace.toString());
             }
 
-            invokeWithChain(dep, [], chain);
-        })
+            invokeWithChain(dep, [], chain, function() {
+                if(task.dependencies.length > ++i) {
+                    invoke(i, cb);
+                } else {
+                    if(common.isFunction(cb)) {
+                        cb();
+                    }
+                }
+            });
+        };
+
+        invoke(0, cb);
+    } else {
+        if(common.isFunction(cb)) {
+            cb();
+        }
     }
 }

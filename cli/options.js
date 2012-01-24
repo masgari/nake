@@ -8,7 +8,6 @@ exports.options = {
     'encoding': [String, null],
     'search': [Boolean, true],
     "tasks": [String, null],
-    'lib': [path, Array],
     'include': [path, Array],
     'quiet': Boolean,
     'level': [String, null],
@@ -24,7 +23,6 @@ exports.shortHands = {
     'e': ['--encoding'],
     'N': ['--no-search'],
     'T': ['--tasks'],
-    'L': ['--lib'],
     'I': ['--include'],
     'q': ['--quiet'],
     'v': ['--level', 'debug'],
@@ -42,7 +40,6 @@ exports.settingsMap = {
     'nakefile': 'app.nakefile',
     'encoding': 'app.encoding',
     "tasks": 'app.showTasks',
-    'lib': 'context.libs',
     'include': 'context.includes',
     'quiet': 'output.quiet',
     'level': 'output.level'

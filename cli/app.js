@@ -152,10 +152,13 @@ exports.main = function(argv) {
         }
 
         // call the requested task
+        var startTime = Date.now();
         var taskName = args.length > 0 ? args.shift() : 'default';
-        mainContext.call(taskName, args);
+        mainContext.call(taskName, args, function() {
+            nake.output.log('Completed successfully in %.0f seconds', (Date.now() - startTime) / 1000);
+        });
     } catch(err) {
-        nake.output.error(err);
+        nake.output.error(err.stack);
         process.exit(2);
     }
 };

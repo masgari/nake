@@ -6,7 +6,9 @@
     },
 
     "context": {
-        "libs": [
+        "require": {
+        },
+        "include": [
         ]
     },
 
