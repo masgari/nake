@@ -1,9 +1,13 @@
 {
 	"name": "nake",
 	"description": "A build system for node.js",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"homepage": "https://github.com/cpradog/Nake",
 	"author": "Carlos Prado (cpradog@me.com)",
+    "licenses": [{
+        "type": "Apache License, Version 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }],
 	"repository": {
 		"type": "git",
 		"url": "git://git@github.com:cpradog/Nake.git"
