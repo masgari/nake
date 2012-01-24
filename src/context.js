@@ -6,6 +6,7 @@ var settings = require('./settings');
 var output = require('./output');
 var Namespace = require('./namespace');
 var Task = require('./task');
+var cs = require('coffee-script');
 
 /**
  * Resolve a path reference.
@@ -117,19 +118,27 @@ function Context(file, encoding, parent) {
 
     output.info('Loading file: %s', file);
     var script = common.stripBOM(fs.readFileSync(file, encoding || 'utf8'));
+
+    if(path.extname(file) == '.coffee') {
+        script = cs.compile(script, { filename: file });
+    }
+
     vm.runInNewContext(script, this._sandbox, file);
 
-    // Include all configured includes
-    var includes = settings.get('context.include', []);
-    var self = this;
-    includes.forEach(function(include) {
-        try {
-            self.include(path.resolve(path.dirname(file), resolvePath(include)));
-        } catch(e) {
-            output.warn('Unable to include: %s', include);
-            output.warn(e.message);
-        }
-    });
+    if(this._parent === null) {
+        var self = this;
+
+        // Include all configured includes
+        var includes = settings.get('context.include', []);
+        includes.forEach(function(include) {
+            try {
+                self.include(path.resolve(path.dirname(file), resolvePath(include)));
+            } catch(e) {
+                output.warn('Unable to include: %s', include);
+                output.warn(e.message);
+            }
+        });
+    }
 }
 module.exports = Context;
 
@@ -227,7 +236,6 @@ Context.prototype.include = function(p, encoding) {
 
     var s = fs.lstatSync(p);
     if(s.isFile()) {
-        output.info('loading file: %s', p);
         new Context(p, encoding, this);
         return;
     }

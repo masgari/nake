@@ -1,7 +1,12 @@
 {
     "config": {
         "Nakefiles": [
-            "Nakefile", "Nakefile.js", "nakefile", "nakefile.js"
+            "Nakefile",
+            "Nakefile.js",
+            "Nakefile.coffee",
+            "nakefile",
+            "nakefile.js",
+            "nakefile.coffee"
         ]
     },
 
