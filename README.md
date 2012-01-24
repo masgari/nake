@@ -122,7 +122,7 @@ To get a property value:
 * Name: A string with the property name.
 * Value: Any value for the property.
 
-### Related projects
+## Related projects
 
 Matthew Eernisse's Jake: <http://raw.github.com/mde/jake>
 
@@ -136,15 +136,15 @@ Confusingly, this is a Ruby tool for building JavaScript packages from source co
 
 This is also a JavaScript port of Rake, which runs on the Narwhal platform.
 
-### Author
+## Author
 
 Carlos Prado, cpradog@me.com
 
-### Contributors
+## Contributors
 
 Any help is welcome.
 
-### License
+## License
 
 Licensed under the Apache License, Version 2.0
 (<http://www.apache.org/licenses/LICENSE-2.0>)
