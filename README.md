@@ -1,6 +1,6 @@
 #NAKE -- A JavaScript build system for Node.js
 
-##Installing
+##Installing:
 
 ###Prerequisites:
 * [Node.js](http://nodejs.org/)
