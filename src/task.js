@@ -166,7 +166,7 @@ function invokeWithChain(task, args, chain, cb) {
     chain.append(task);
     invokeDependencies(task, chain, function() {
         if(task.isNeeded()) {
-            output.log(task.name + ':');
+            output.log(task.toString().slice(Namespace.globalNamespaceName.length + Namespace.separator.length) + ':');
             output.indent += 4;
 
             try {

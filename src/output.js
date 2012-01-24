@@ -129,12 +129,10 @@ Output.prototype.format = function(value) {
                 value.forEach(function(item) {
                     msg += this.format(item) + '\n';
                 });
+            } else if(value instanceof Error || value.stack) {
+                msg = value.stack || value.toString() + '\n' + this._getTrace();
             } else {
-                if(value instanceof Error) {
-                    msg = value.stack || value.toString();
-                } else {
-                    msg = util.inspect(value);
-                }
+                msg = util.inspect(value);
             }
             break;
         default:
@@ -243,14 +241,13 @@ Output.prototype.timeEnd = function(label) {
 };
 
 /**
- * Writes a message with trace information.
+ * Returns the current stack trace.
  *
  * @this {Output}
- * @public
+ * @private
+ * @returns {string}
  */
-Output.prototype.trace = function() {
-    var msg = Output.prototype.format.apply(this, arguments);
-
+Output.prototype._getTrace = function() {
     // get the current stack-trace.
     var trace = stackTrace.get();
 
@@ -265,10 +262,17 @@ Output.prototype.trace = function() {
     // remove dummy object
     trace.shift();
 
-    // append the trace to the message.
-    msg += '\n' + trace.join('\n');
+    return trace.join('\n');
+};
 
-    this._write('information', msg);
+/**
+ * Writes a message with trace information.
+ *
+ * @this {Output}
+ * @public
+ */
+Output.prototype.trace = function() {
+    this._write('information', Output.prototype.format.apply(this, arguments) + '\n' + this._getTrace());
 };
 
 /**

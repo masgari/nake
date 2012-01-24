@@ -158,7 +158,7 @@ exports.main = function(argv) {
             nake.output.log('Completed successfully in %.0f seconds', (Date.now() - startTime) / 1000);
         });
     } catch(err) {
-        nake.output.error(err.stack);
+        nake.output.error(err);
         process.exit(2);
     }
 };
