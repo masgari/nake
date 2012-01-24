@@ -1,5 +1,8 @@
 #NAKE -- A JavaScript build system for Node.js
 
+Nake is a build system writen entirely in javascript and focused in provide a
+complete build system for node.js projects.
+
 ##Installing:
 
 ###Prerequisites:
@@ -16,11 +19,6 @@
 ##Usage:
 
     nake [options] [task] [arg1] [arg2] ...
-
-##Description:
-
-Nake is a build system writen entirely in javascript and focused in provide a
-complete build system for node.js projects.
 
 ###Features:
 
