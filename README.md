@@ -65,7 +65,7 @@ A task is the main unit of work in a Nakefile.
 * options: Allow to configure aditional task behaviour.
     + async: If true the task will be executed in asynchronous mode and will require to call this.done() to finish the task.
 
-####Task description
+###Description
 
 To add a description to a task use the desc function before the task definition.
 
