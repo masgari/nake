@@ -3,6 +3,15 @@
 Nake is a build system writen entirely in javascript and focused in provide a
 complete build system for node.js projects.
 
+###Features:
+
+* Nakefiles are standard JavaScript syntax or [CoffeScript](http://coffeescript.org/).
+* Task with prerequisites
+* Namespaces
+* Asynchronous task execution
+* A built-in library with common tasks (Work in progress)
+* Include tasks from other modules
+
 ##Installing:
 
 ###Prerequisites:
@@ -19,15 +28,6 @@ complete build system for node.js projects.
 ##Usage:
 
     nake [options] [task] [arg1] [arg2] ...
-
-###Features:
-
-* Nakefiles are standard JavaScript syntax or [CoffeScript](http://coffeescript.org/).
-* Task with prerequisites
-* Namespaces
-* Asynchronous task execution
-* A built-in library with common tasks (Work in progress)
-* Include tasks from other modules
 
 ##Examples:
 
