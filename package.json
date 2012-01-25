@@ -15,6 +15,9 @@
 	"engine": {
 		"node": ">=0.4.7"
 	},
+    "bin": {
+        "nake": "./bin/nake"
+    },
 	"dependencies": {
 		"stack-trace": "0.0.6",
 		"long-stack-traces": "0.1.2",

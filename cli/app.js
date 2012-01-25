@@ -156,7 +156,7 @@ exports.main = function(argv) {
         }
 
         if(nake.settings.get('app.showVersion')) {
-            nake.output.log("v%s", settings.get('package.version'));
+            nake.output.log("v%s", nake.settings.get('package.version'));
             process.exit(1);
         }
 
