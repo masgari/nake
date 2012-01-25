@@ -1,5 +1,5 @@
 {
-	"name": "nake",
+	"name": "node-make",
 	"description": "A build system for node.js",
 	"version": "0.1.0",
 	"homepage": "https://github.com/cpradog/Nake",

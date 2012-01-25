@@ -19,7 +19,7 @@ complete build system for node.js projects.
 
 ###Installing with [NPM](http://npmjs.org/):
 
-    npm install -g nake
+    npm install -g node-make
 
 ###Sources:
 
