@@ -12,7 +12,8 @@
 
     "context": {
         "require": {
-            "exec": "${NAKE_HOME}/lib/exec.js"
+            "exec": "${NAKE_HOME}/lib/exec.js",
+            "FileList": "${NAKE_HOME}/lib/fileList.js"
         },
         "include": [
         ]

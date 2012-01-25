@@ -20,7 +20,8 @@
 		"long-stack-traces": "0.1.2",
 		"nopt": "1.0.10",
         "pkginfo": "0.2.3",
-        "coffee-script": "1.2.0"
+        "coffee-script": "1.2.0",
+        "glob": "3.0.1"
 	},
     "main": "./src/nake.js",
 	"devDependencies": {
