@@ -114,14 +114,17 @@ Output.prototype._write = function(level, msg) {
 
     var s = level.isError ? process.stdout : process.stderr;
 
-    for(var i = 0; i < this.indent; i++) {
-        s.write(' ');
-    }
-    s.write(level.format || '');
-    s.write(level.prefix || '');
-    s.write(msg);
-    s.write('\n');
-    s.write('\x1B[0m');
+    var lines = msg.split('\n');
+    lines.forEach(function(line) {
+        for(var i = 0; i < this.indent; i++) {
+            s.write(' ');
+        }
+        s.write(level.format || '');
+        s.write(level.prefix || '');
+        s.write(line);
+        s.write('\n');
+        s.write('\x1B[0m');
+    });
 };
 
 /**
@@ -132,6 +135,7 @@ Output.prototype._write = function(level, msg) {
  * @returns {string}
  */
 Output.prototype.format = function(value) {
+    var self = this;
     var type = typeof(value);
     var msg = '';
 
@@ -145,7 +149,7 @@ Output.prototype.format = function(value) {
         case 'object':
             if(common.isArray(value)) {
                 value.forEach(function(item) {
-                    msg += this.format(item) + '\n';
+                    msg += self.format(item) + '\n';
                 });
             } else if(value instanceof Error || value.stack) {
                 msg = value.stack || value.toString() + '\n' + this._getTrace();
