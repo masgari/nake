@@ -25,6 +25,7 @@ var output = require('./output');
 var Namespace = require('./namespace');
 var Task = require('./task');
 var cs = require('coffee-script');
+var existsSync = fs.existsSync ? fs.existsSync : path.existsSync;
 
 /**
  * Resolve a path reference.
@@ -88,7 +89,7 @@ var createSandbox = function(ctx, file) {
  */
 function Context(file, encoding, parent) {
     output.assert(common.isNullOrUndefined(parent) || parent instanceof Context, 'Context parent must be null, undefined or a Context object');
-    if(!path.existsSync(file)) {
+    if(!existsSync(file)) {
         throw new Error('File not found: ' + file);
     }
 
@@ -248,7 +249,7 @@ Context.prototype.namespace = function(name, fn) {
  */
 Context.prototype.include = function(p, encoding) {
     p = path.resolve(this.__dirname, p);
-    if(!path.existsSync(p)) {
+    if(!existsSync(p)) {
         throw new Error('File not found: ' + p);
     }
 
