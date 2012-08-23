@@ -1,7 +1,7 @@
 {
 	"name": "node-make",
 	"description": "A build system for node.js",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"homepage": "https://github.com/cpradog/Nake",
 	"author": "Carlos Prado (cpradog@me.com)",
     "licenses": [{

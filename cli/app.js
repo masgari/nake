@@ -19,10 +19,14 @@
 // enable long-stack-traces
 require('long-stack-traces');
 
+var fs = require('fs');
 var path = require('path');
 var nopt = require('nopt');
 var nake = require('../src/nake');
 var options = require('./options');
+
+var existsSync = fs.existsSync ? fs.existsSync : path.existsSync;
+
 /**
  * Find the nakefile.
  *
@@ -39,7 +43,7 @@ var findNakefile = function() {
             var cwd = process.cwd();
             for(var i = 0, l = nakefiles.length; i < l; i++) {
                 var file = path.resolve(cwd, nakefiles[i]);
-                if(path.existsSync(file)) {
+                if(existsSync(file)) {
                     nakefile = file;
                     break;
                 }
@@ -62,7 +66,7 @@ var findNakefile = function() {
         process.chdir(originalCWD);
     }
 
-    if(nake.common.isNullOrUndefined(nakefile) || !path.existsSync(nakefile)) {
+    if(nake.common.isNullOrUndefined(nakefile) || !existsSync(nakefile)) {
         throw new Error('Nakefile not found (looking for: %s)', nakefiles.join(', '));
     }
 

@@ -22,6 +22,7 @@ var fs = require('fs');
 var path = require('path');
 var pkginfo = require('pkginfo').read(module).package;
 var common = require('./common');
+var existsSync = fs.existsSync ? fs.existsSync : path.existsSync;
 
 /**
  * Represents a settings store.
@@ -90,7 +91,7 @@ Settings.prototype.set = function(key, value) {
  * @param {string} file The settings file path.
  */
 Settings.prototype.importFile = function(file) {
-    if(!path.existsSync(file)) {
+    if(!existsSync(file)) {
         return;
     }
 
